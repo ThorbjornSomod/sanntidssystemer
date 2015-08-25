@@ -30,8 +30,8 @@ void list_delete(list_t list)
 		temp = NULL; 
 	}	
 
-	free(list->head);
-	free(list);	
+	//free(list->head);
+	free(list);
 
 }
 
