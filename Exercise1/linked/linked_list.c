@@ -15,13 +15,13 @@ list_t list_create()
 
 void list_delete(list_t list)
 {
-	struct node *curr = list->tail;
-	struct node *prev = curr->prev;
+	struct node *curr = list->head;
+	struct node *next = curr->next;
 	struct node *temp;
 
-	while(prev){
+	while(next){
 		temp = curr;
-		curr = prev;
+		curr = next;
 
 		free(temp->next);
 		free(temp->prev);
@@ -29,6 +29,10 @@ void list_delete(list_t list)
 
 		temp = NULL; 
 	}	
+
+	free(list->head);
+	free(list);	
+
 }
 
 void list_insert(list_t list, int index, int data)

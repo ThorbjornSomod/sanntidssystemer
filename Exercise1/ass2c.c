@@ -3,7 +3,13 @@
 
 void allocate(int value){
 	int *ptr = NULL;
-	ptr = malloc(100000 * sizeof(int));
+	ptr = malloc(1000000000000000 * sizeof(int));
+
+	if(ptr == NULL || ptr < 0){
+		perror("Error, invalid ptr");
+		exit(0);
+	}	
+
 	*ptr = value;
 	printf("test of allocated memory: %i\n", value);
 }
