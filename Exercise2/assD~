@@ -1,0 +1,13 @@
+#include <stdlib.h>
+#include <semaphore.h>
+#include <pthread.h>
+#include <sys/times.h>
+#include <unistd.h>
+#include <stdio.h>
+
+void* thread(){
+
+	bool running = 0;
+
+	return NULL;
+}

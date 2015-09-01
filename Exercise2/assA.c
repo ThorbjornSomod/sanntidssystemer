@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int global_counter = 0;
+
+int main(){
+	
+	pid_t pid = vfork();
+	int local_counter = 0;
+	
+	int i;
+	for(i = 0 ; i < 500 ; i++){
+		if(pid == 0){
+			printf("Child: ");
+		}else if(pid > 0){
+			printf("Parent: ");
+		}else{
+			printf("Fork failed!\n");
+		}
+		global_counter += 1;
+		local_counter += 1;
+		printf("Global: %i : Local: %i \n", global_counter, local_counter);
+	}
+	
+	return 0;
+}
