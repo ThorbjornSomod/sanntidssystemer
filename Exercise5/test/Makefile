@@ -1,5 +1,5 @@
 # program executable name 
-TARGET = a
+TARGET = main
 # compiler flags 
 CFLAGS = -g -Wall 
 # linker flags 

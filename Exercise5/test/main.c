@@ -18,6 +18,7 @@ int main(){
 		io_write(2,toggle);
 		io_write(3,toggle);
 		sleep(1);
+		printf("%i \n", io_read(2));
 		if(toggle){
 			toggle = 0;
 			continue;

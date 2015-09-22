@@ -1,7 +1,7 @@
 # program executable name 
-TARGET = a
+TARGET = c
 # compiler flags 
-CFLAGS = -g -Wall 
+CFLAGS = -g -Wall -D_GNU_SOURCE
 # linker flags 
 LDFLAGS = -g -pthread -lrt -lcomedi -lm
 # list of sources 
