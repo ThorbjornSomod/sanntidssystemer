@@ -1,0 +1,101 @@
+#include <stdio.h>
+#include <signal.h>
+#include <unistd.h>
+#include <sys/mman.h>
+#include <sched.h>
+#include <pthread.h>
+#include <native/task.h>
+#include <native/timer.h>
+#include <native/sem.h>
+#include <native/mutex.h>
+#include <rtdk.h>
+#include <sys/io.h>
+
+RT_SEM synca;
+static RT_MUTEX A, B;
+RT_TASK L, H;
+
+int rt_task_sleep_ms(unsigned long delay){
+	return rt_task_sleep(1000*1000*delay);
+}
+
+void busy_wait_ms(unsigned long delay){
+	unsigned long count = 0;
+	while (count <= delay*10){
+		rt_timer_spin(1000*100);
+		count++;
+	}
+}
+
+void low(){
+	rt_sem_p(&synca, TM_INFINITE);
+	rt_mutex_acquire(&A, TM_INFINITE);
+	rt_task_set_priority(&L, 3);
+	rt_printf("LOW ACQUIRED A\n");
+	busy_wait_ms(200);
+	busy_wait_ms(200);
+	busy_wait_ms(200);
+	rt_mutex_acquire(&B, TM_INFINITE);
+	rt_printf("LOW_ACQUIRED B\n");
+	busy_wait_ms(200);
+	busy_wait_ms(200);
+	busy_wait_ms(200);
+	rt_printf("LOW RELEASED B\n");
+	rt_mutex_release(&B);
+	rt_printf("LOW RELEASED A\n");
+	rt_mutex_release(&A);
+	rt_task_set_priority(&L, 1);
+	rt_printf("LOW LOWERED\n");
+	busy_wait_ms(200);
+	rt_printf("LOW FINISHED\n");
+}
+
+void high(){
+	rt_sem_p(&synca, TM_INFINITE);
+	rt_task_sleep_ms(200);
+	rt_mutex_acquire(&B, TM_INFINITE);
+	rt_printf("HIGH ACQUIRED B\n");
+	busy_wait_ms(200);
+	rt_mutex_acquire(&A, TM_INFINITE);
+	rt_printf("HIGH ACQUIRED A\n");
+	busy_wait_ms(200);
+	busy_wait_ms(200);
+	rt_mutex_release(&A);
+	rt_printf("HIGH RELEASE A\n");
+	rt_mutex_release(&B);
+	rt_printf("HIGH RELEASED B\n");
+	busy_wait_ms(200);
+	rt_printf("HIGH FINISHED\n");
+}
+
+int main(){
+
+	mlockall(MCL_CURRENT|MCL_FUTURE);
+	rt_print_auto_init(1);
+
+	rt_mutex_create(&A, "mutexA");
+	rt_mutex_create(&B, "mutexB");
+	rt_sem_create(&synca, "sync", 0, S_PRIO);
+
+	
+
+	rt_task_create(&L, "low", 0, 1, T_CPU(1)|T_JOINABLE);
+	rt_task_create(&H, "high", 0, 3, T_CPU(1)|T_JOINABLE);
+
+	rt_task_start(&L, &low, (void*) 0);
+	rt_task_start(&H, &high, (void*) 0);
+
+	usleep(100000);
+	rt_printf("RELEASING SYNC\n");
+	
+	rt_sem_broadcast(&synca);
+
+	rt_task_join(&L);
+	rt_task_join(&H);
+
+	rt_sem_delete(&synca);
+	rt_mutex_delete(&A);
+	rt_mutex_delete(&B);
+	
+	return 0;
+}
