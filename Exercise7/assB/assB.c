@@ -36,15 +36,15 @@ void busy_wait_ms(unsigned long delay){
 void low(){
 	rt_sem_p(&synca, TM_INFINITE);
 	rt_printf("LOW RUNNING\n");
-	//rt_sem_p(&semaphore, TM_INFINITE);
-	rt_mutex_acquire(&mutex, TM_INFINITE);
+	rt_sem_p(&semaphore, TM_INFINITE);
+	//rt_mutex_acquire(&mutex, TM_INFINITE);
 	rt_printf("LOW AQUIRED LOCK\n");
 	busy_wait_ms(100);
 	busy_wait_ms(100);
 	busy_wait_ms(100);
 	rt_printf("LOW FINISHED\n");
-	//rt_sem_v(&semaphore);
-	rt_mutex_release(&mutex);
+	rt_sem_v(&semaphore);
+	//rt_mutex_release(&mutex);
 	
 }
 
@@ -64,14 +64,14 @@ void high(){
 	rt_sem_p(&synca, TM_INFINITE);
 	rt_task_sleep_ms(200);
 	rt_printf("HIGH RUNNING\n");
-	//rt_sem_p(&semaphore, TM_INFINITE);
-	rt_mutex_acquire(&mutex, TM_INFINITE);
+	rt_sem_p(&semaphore, TM_INFINITE);
+	//rt_mutex_acquire(&mutex, TM_INFINITE);
 	rt_printf("HIGH AQUIRED LCOK\n");
 	busy_wait_ms(100);
 	busy_wait_ms(100);
 	rt_printf("HIGH FINISHED\n");
-	//rt_sem_v(&semaphore);
-	rt_mutex_release(&mutex);
+	rt_sem_v(&semaphore);
+	//rt_mutex_release(&mutex);
 	
 }
 	
@@ -79,7 +79,7 @@ void high(){
 int main(){
 	mlockall(MCL_CURRENT|MCL_FUTURE);
 	rt_print_auto_init(1);
-	//rt_sem_create(&semaphore, "sem", 1, S_PRIO);
+	rt_sem_create(&semaphore, "sem", 1, S_PRIO);
 	rt_sem_create(&synca, "sync", 0, S_PRIO);
 	rt_mutex_create(&mutex, "mutex");
 

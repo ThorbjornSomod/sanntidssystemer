@@ -30,7 +30,7 @@ void busy_wait_ms(unsigned long delay){
 void low(){
 	rt_sem_p(&synca, TM_INFINITE);
 	rt_mutex_acquire(&A, TM_INFINITE);
-	rt_task_set_priority(&L, 3);
+	//rt_task_set_priority(&L, 3);
 	rt_printf("LOW ACQUIRED A\n");
 	busy_wait_ms(200);
 	busy_wait_ms(200);
@@ -44,7 +44,7 @@ void low(){
 	rt_mutex_release(&B);
 	rt_printf("LOW RELEASED A\n");
 	rt_mutex_release(&A);
-	rt_task_set_priority(&L, 1);
+	//rt_task_set_priority(&L, 1);
 	rt_printf("LOW LOWERED\n");
 	busy_wait_ms(200);
 	rt_printf("LOW FINISHED\n");
@@ -65,6 +65,7 @@ void high(){
 	rt_mutex_release(&B);
 	rt_printf("HIGH RELEASED B\n");
 	busy_wait_ms(200);
+	rt_printf("HIGH FINISHED\n");
 }
 
 int main(){
