@@ -1,0 +1,24 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/dispatch.h>
+#include <sys/mman.h>
+#include <shared_memory.h>
+#include <server.h>
+
+int main(int argc, char *argv[]) {
+
+	pthread_t thread_A;
+	pthread_t thread_B;
+
+	pthread_create(&thread_A, NULL, create_server, NULL);)
+
+	shared_memory_func();
+	read_memory();
+	return EXIT_SUCCESS;
+}
+
+

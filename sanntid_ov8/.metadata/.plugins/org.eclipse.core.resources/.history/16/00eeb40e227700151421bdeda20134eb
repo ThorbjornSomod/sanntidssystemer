@@ -1,0 +1,31 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/dispatch.h>
+#include <sys/mman.h>
+#include <sys/times.h>
+#include <shared_memory.h>
+#include <server.h>
+
+int main(int argc, char *argv[]) {
+
+	shared_memory_func();
+
+	pthread_t thread_A;
+	pthread_t thread_B;
+
+	pthread_create(&thread_A, NULL, create_server, NULL);
+	sleep(1);
+	pthread_create(&thread_B, NULL, create_client, NULL);
+
+	pthread_join(thread_A, NULL);
+	pthread_join(thread_B, NULL);
+
+	//read_memory();
+	return EXIT_SUCCESS;
+}
+
+

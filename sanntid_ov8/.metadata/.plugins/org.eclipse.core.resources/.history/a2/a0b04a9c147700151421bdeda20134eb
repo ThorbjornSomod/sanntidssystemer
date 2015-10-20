@@ -1,0 +1,47 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/dispatch.h>
+#include <sys/mman.h>
+#include <shared_memory.h>
+
+struct pid_data{
+	pthread_mutex_t pid_mutex;
+	pid_t pid;
+	int data;
+};
+
+int shared_memory_func(){
+
+	struct pid_data pid;
+	pid.data = 5;
+	int test = shm_open("/sharedpid", O_RDWR |O_CREAT, S_IRWXU);
+	struct pid_data *ptr;
+	ptr = mmap(0,sizeof(struct pid_data), PROT_READ | PROT_WRITE, MAP_SHARED, test, 0);
+
+	pthread_mutexattr_t myattr;
+	pthread_mutexattr_init(&myattr);
+	pthread_mutexattr_setpshared(&myattr, PTHREAD_PROCESS_SHARED);
+	pthread_mutex_init(&ptr->pid_mutex, &myattr);
+
+	ptr->pid = getpid();
+
+	printf("Mutex ID: %i \n", ptr);
+	return 0;
+
+}
+
+void read_memory(){
+	int test = shm_open("/sharedpid", O_RDWR, S_IRWXU);
+	struct pid_data *ptr;
+	ptr = mmap(0,sizeof(struct pid_data),  PROT_READ | PROT_WRITE, MAP_SHARED, test, 0);
+	printf("Mutex ID read: %i \n", ptr);
+
+}
+
+
+
+

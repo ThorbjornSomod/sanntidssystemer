@@ -1,0 +1,53 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/dispatch.h>
+#include <sys/mman.h>
+#include <sys/times.h>
+#include <shared_memory.h>
+#include <server.h>
+
+int main(int argc, char *argv[]) {
+
+	shared_memory_func();
+	//read_memory();
+
+	/*
+	pthread_t thread_A;
+	pthread_t thread_B;
+
+	pthread_create(&thread_A, NULL, create_server, NULL);
+	sleep(1);
+	pthread_create(&thread_B, NULL, create_client, NULL);
+
+	pthread_join(thread_A, NULL);
+	pthread_join(thread_B, NULL);
+	*/
+
+	pthread_t thread_server;
+	pthread_t thread_A;
+	pthread_t thread_B;
+	pthread_t thread_C;
+	pthread_t thread_D;
+
+	pthread_create(&thread_server, NULL, create_server, NULL);
+	pthread_create(&thread_A, NULL, create_client_A, NULL);
+	pthread_create(&thread_B, NULL, create_client_B, NULL);
+	pthread_create(&thread_C, NULL, create_client_C, NULL);
+	pthread_create(&thread_D, NULL, create_client_D, NULL);
+
+	pthread_join(thread_server, NULL);
+	pthread_join(thread_A, NULL);
+	pthread_join(thread_B, NULL);
+	pthread_join(thread_C, NULL);
+	pthread_join(thread_D, NULL);
+
+
+
+	return EXIT_SUCCESS;
+}
+
+

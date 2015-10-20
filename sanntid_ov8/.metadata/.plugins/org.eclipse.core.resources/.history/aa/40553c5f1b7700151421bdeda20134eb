@@ -1,0 +1,47 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/dispatch.h>
+#include <sys/mman.h>
+#include <sys/times.h>
+#include <server.h>
+#include <shared_memory.h>
+
+void* create_server(){
+
+	int msg[2];
+
+	int chan_id = ChannelCreate(0);
+	printf("Channel Created\n");
+	int msg_id = MsgReceive(chan_id, msg, sizeof(msg), NULL);
+
+	printf("Msg_ID %i\n", msg_id);
+	printf("Message received serverside: %i \n", msg[1]);
+	sleep(1);
+	int *reply = 5;
+
+	MsgReply(msg_id, 0, reply, sizeof(reply));
+
+}
+
+void* create_client(){
+
+	int buf[2];
+
+	int pid = read_memory();
+	printf("%i\n", pid);
+
+	int chan_id = ConnectAttach(0, pid, 1, 0, 0);
+	printf("Connected to server\n");
+	int *msg = 8;
+
+	int status = MsgSend(chan_id, msg, sizeof(msg), buf, sizeof(buf));
+
+	printf("Message received clientside: %i \n", buf[0]);
+
+	ConnectDetach(chan_id);
+
+}

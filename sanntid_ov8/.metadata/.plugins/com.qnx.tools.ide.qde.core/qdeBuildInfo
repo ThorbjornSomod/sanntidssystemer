@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QdeProjectsBuildInfo>
+<qdeBuildInfo IMemento.internal.id="C:/Users/TEMP/Desktop/sanntid_ov8/sanntid_ov8" buildConfig="_x86_r" projectName="sanntid_ov8">
+<srcDirs>
+<element>C:/Users/TEMP/Desktop/sanntid_ov8/sanntid_ov8/x86/o</element>
+<element>C:/Users/TEMP/Desktop/sanntid_ov8/sanntid_ov8/x86</element>
+<element>C:/Users/TEMP/Desktop/sanntid_ov8/sanntid_ov8</element>
+</srcDirs>
+<libDirs>
+<element>C:/Users/TEMP/Desktop/sanntid_ov8/sanntid_ov8/x86/o</element>
+<element>C:/QNX650/target/qnx6/x86/lib</element>
+<element>C:/QNX650/target/qnx6/x86/usr/lib</element>
+</libDirs>
+<incDirs>
+<element>C:/QNX650/target/qnx6/usr/include</element>
+<element>C:/Users/TEMP/Desktop/sanntid_ov8/sanntid_ov8/x86/o</element>
+<element>C:/Users/TEMP/Desktop/sanntid_ov8/sanntid_ov8/x86</element>
+<element>C:/Users/TEMP/Desktop/sanntid_ov8/sanntid_ov8</element>
+</incDirs>
+<libs/>
+<SRCS>
+<element>C:/Users/TEMP/Desktop/sanntid_ov8/sanntid_ov8/sanntid_ov8.c</element>
+</SRCS>
+</qdeBuildInfo>
+</QdeProjectsBuildInfo>

@@ -1,0 +1,23 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/dispatch.h>
+#include <sys/mman.h>
+
+int main(int argc, char *argv[]) {
+
+	int test = shm_open("/sharedpid", O_RDWR, S_IRWXU);
+	void ptr = mmap(0,sizeof(pid_data), PROT_READ | PROT_WRITE, MAP_SHARED, test, 0);
+
+	return EXIT_SUCCESS;
+}
+
+struct pid_data{
+	pthread_mutex_t pid_mutex;
+	pid_t pid;
+};
+
+
