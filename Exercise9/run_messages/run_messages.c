@@ -15,10 +15,12 @@ int main(int argc, char *argv[]) {
 	int fd;
 	while(1){
 		//printf("RUN MESSAGES\n");
-		fd = open("/net/target_one/dev/myresource", O_RDWR);
+		fd = open("/net/target_one/dev/myresource", O_RDONLY);// | O_BLOCK);
 		if(fd>0){
 			read(fd,buf,100);
+			close(fd);
 			printf("Linje: %s\n",buf);
+			memset(buf,'\0',100);
 		}
 		delay(1000);
 	}

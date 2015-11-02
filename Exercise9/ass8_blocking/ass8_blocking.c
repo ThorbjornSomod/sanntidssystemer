@@ -23,15 +23,15 @@ void error(char *s){
 void* counter_func(){
 	while(1){
 		char *message[255];
-		pthread_mutex_lock(&queue.resource_mutex);
+		/*pthread_mutex_lock(&queue.resource_mutex);
 		printf("%i\n",(queue.blocked_id[queue.blockedHead]!=0));
 		printf("SSTRING: %i\n", fifo_status(&queue));
 		if ((queue.blocked_id[queue.blockedHead]!=0) && fifo_status(&queue)){
 			printf("BLOCKED AND NEW MESSAGE\n");
-			fifo_rem_string(&queue, &message);
-		  	MsgReply(fifo_rem_blocked_id(&queue), 0, &message, nbytes);
+			//fifo_rem_string(&queue, &message);
+		  	MsgReply(fifo_rem_blocked_id(&queue), 0, &queue.fifo[queue.fifoHead], strlen(queue.fifo[queue.fifoHead]));
 		}
-		pthread_mutex_unlock(&queue.resource_mutex);
+		pthread_mutex_unlock(&queue.resource_mutex);*/
 		delay(1000);
 	}
 }
@@ -52,8 +52,12 @@ int io_write(resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb){
 	//printf("Received %d bytes = '%s'\n", msg->i.nbytes, buf);
 
 	pthread_mutex_lock(&queue.resource_mutex);
-	fifo_add_string(&queue, buf);
-	printf("STRING ADDED\n");
+	if ((queue.blocked_id[queue.blockedHead]!=0)){
+		MsgReply(fifo_rem_blocked_id(&queue), 0, buf, msg->i.nbytes+1);
+	}else{
+		fifo_add_string(&queue, buf);
+		printf("STRING ADDED\n");
+	}
 	pthread_mutex_unlock(&queue.resource_mutex);
 
 	free(buf);
